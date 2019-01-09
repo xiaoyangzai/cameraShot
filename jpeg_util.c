@@ -324,8 +324,10 @@ void yuyv_to_rgb(unsigned char* yuyv,unsigned char* rgb24,int w,int h)
     unsigned  char* b1 = rgb24 + 5;
    
     float rt0 = 0, gt0 = 0, bt0 = 0, rt1 = 0, gt1 = 0, bt1 = 0;
+	int rgb_count = 0;
+	int yuyv_count = 0;
  
-    for(i = 0; i <= (w * h) / 2 ;i++)
+    for(i = 0; i < (w * h) / 2 ;i++)
     {
         bt0 = 1.164 * (*y0 - 16) + 2.018 * (*u0 - 128); 
         gt0 = 1.164 * (*y0 - 16) - 0.813 * (*v0 - 128) - 0.394 * (*u0 - 128); 
@@ -364,6 +366,8 @@ void yuyv_to_rgb(unsigned char* yuyv,unsigned char* rgb24,int w,int h)
  
         yuyv = yuyv + 4;
         rgb24 = rgb24 + 6;
+		rgb_count += 6;
+		yuyv_count += 4;
         if(yuyv == NULL)
           break;
  
@@ -379,6 +383,7 @@ void yuyv_to_rgb(unsigned char* yuyv,unsigned char* rgb24,int w,int h)
         g1 = rgb24 + 4;
         b1 = rgb24 + 5;
     }   
+	printf("convert down!!!\n");
 }
 
 /*

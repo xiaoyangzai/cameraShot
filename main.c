@@ -43,13 +43,25 @@ int main(int argc,char *argv[])
 	if(video.videofd < 0)
 		SYS_ERR("open video device failed");
 	memonry_pool_t *pool = memonry_pool_create(10*1024*1024);
+	if(pool == NULL)
+	{
+		printf("create memory pool failed\n");
+		return -1;
+	}
 	init_v4l2_device(&video,4,pool);
 	
 	uint8_t *rgb24 = (uint8_t *)memonry_pool_alloc(pool,video.width*video.height*3);
+	if(!rgb24)
+	{
+		printf("allocate memonry failed\n");
+		return -1;
+	}
+	printf("holder next fram...\n");
 	//uint8_t *resizedata = (uint8_t *)memonry_pool_alloc(pool,224*224*3);
 	holder_next_frame(&video,rgb24);
-	holder_next_frame(&video,rgb24);
+	//holder_next_frame(&video,rgb24);
 
+	printf("hold the next frame.\n");
 	uint8_t *outbuffer = NULL;
 	uint64_t outlen = 0;
 	encode_jpeg(rgb24,video.width,video.height,&outbuffer,&outlen,pool);

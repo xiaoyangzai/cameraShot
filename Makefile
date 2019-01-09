@@ -3,6 +3,7 @@ SOURCE=$(wildcard *.c)
 OBJS=$(patsubst %.c,%.o,$(SOURCE))
 LIBS=-L./libjpeg/lib -ljpeg
 CFLAGS=-I./libjpeg/include -DDEBUG
+CC=gcc
 
 .PHONY:clean
 

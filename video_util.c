@@ -104,6 +104,7 @@ int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t*pool)
     if (ret < 0)
 		SYS_ERR("ioctl format failed");
 
+	printf("===== video set ok! ==========\n");
 	//从内存池中申请空间并映射
 	video->frame_buff_count = frame_buff_count;
 	video->framebuf = (VideoBuffer*)memonry_pool_alloc(pool,frame_buff_count* sizeof(VideoBuffer));
@@ -112,8 +113,9 @@ int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t*pool)
 		printf("Allocate memony failed from memony pool\n");
 		exit(-1);
 	}
-
+	printf("allocate memonry....\n");
 	allocate_memory(video);
+	printf("start capture frame....\n");
 	start_capture_frame(video->videofd);
 	return 0;
 }
@@ -174,8 +176,17 @@ int holder_next_frame(VideoV4l2 *video,uint8_t *rgb24)
 
 	//处理原始图像数据
 	uint8_t *tmpdata = (uint8_t *)video->framebuf[video->buf.index].start; 
+	if(tmpdata == NULL)
+	{
+		printf("get frame failed\n");
+		exit(-1);
+	}
 	if(!video->support_rgb24_flag)
+	{
+		printf("start to conver YUYV to rgb....\n");
+		printf("w: %d\th: %d\n",video->width,video->height);
 		yuyv_to_rgb(tmpdata,rgb24,video->width,video->height);
+	}
 	else
 		memcpy(rgb24,tmpdata,video->width*video->height*3);
 	//释放缓冲区
