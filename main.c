@@ -48,7 +48,7 @@ int main(int argc,char *argv[])
 	uint8_t *rgb24 = (uint8_t *)memonry_pool_alloc(pool,video.width*video.height*3);
 	//uint8_t *resizedata = (uint8_t *)memonry_pool_alloc(pool,224*224*3);
 	holder_next_frame(&video,rgb24);
-	//holder_next_frame(&video,rgb24);
+	holder_next_frame(&video,rgb24);
 
 	uint8_t *outbuffer = NULL;
 	uint64_t outlen = 0;
