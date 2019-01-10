@@ -25,7 +25,7 @@
 }while(0)
 
 
-int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t*pool)
+int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memory_pool_t*pool)
 {
 	assert(video != NULL);
 	assert(pool != NULL);
@@ -107,13 +107,13 @@ int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t*pool)
 	printf("===== video set ok! ==========\n");
 	//从内存池中申请空间并映射
 	video->frame_buff_count = frame_buff_count;
-	video->framebuf = (VideoBuffer*)memonry_pool_alloc(pool,frame_buff_count* sizeof(VideoBuffer));
+	video->framebuf = (VideoBuffer*)memory_pool_alloc(pool,frame_buff_count* sizeof(VideoBuffer));
 	if(video->framebuf == NULL)
 	{
 		printf("Allocate memony failed from memony pool\n");
 		exit(-1);
 	}
-	printf("allocate memonry....\n");
+	printf("allocate memory....\n");
 	allocate_memory(video);
 	printf("start capture frame....\n");
 	start_capture_frame(video->videofd);

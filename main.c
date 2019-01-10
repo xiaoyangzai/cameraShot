@@ -42,7 +42,7 @@ int main(int argc,char *argv[])
 	video.videofd = open(argv[1],O_RDWR);
 	if(video.videofd < 0)
 		SYS_ERR("open video device failed");
-	memonry_pool_t *pool = memonry_pool_create(10*1024*1024);
+	memory_pool_t *pool = memory_pool_create(10*1024*1024);
 	if(pool == NULL)
 	{
 		printf("create memory pool failed\n");
@@ -50,14 +50,14 @@ int main(int argc,char *argv[])
 	}
 	init_v4l2_device(&video,4,pool);
 	
-	uint8_t *rgb24 = (uint8_t *)memonry_pool_alloc(pool,video.width*video.height*3);
+	uint8_t *rgb24 = (uint8_t *)memory_pool_alloc(pool,video.width*video.height*3);
 	if(!rgb24)
 	{
-		printf("allocate memonry failed\n");
+		printf("allocate memory failed\n");
 		return -1;
 	}
 	printf("holder next fram...\n");
-	//uint8_t *resizedata = (uint8_t *)memonry_pool_alloc(pool,224*224*3);
+	//uint8_t *resizedata = (uint8_t *)memory_pool_alloc(pool,224*224*3);
 	holder_next_frame(&video,rgb24);
 	//holder_next_frame(&video,rgb24);
 
@@ -72,7 +72,7 @@ int main(int argc,char *argv[])
 		SYS_ERR("weite failed");
 	close(fd);
 	printf("The camera shot has been saved into %s\n",argv[2]);
-	memonry_pool_destroy(pool);
+	memory_pool_destroy(pool);
 
 	//holder_next_frame(&video,rgb24);
 	//scale_rgb24(rgb24,resizedata,video.width,video.height,224,224);

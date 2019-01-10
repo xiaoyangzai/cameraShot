@@ -5,26 +5,26 @@
 #define align_ptr(d,a) (uint8_t*)(((uintptr_t)(d) + (uintptr_t)(a-1)) &(~((uintptr_t)a-1)))
 #include "memory_pool.h"
 
-memonry_pool_t *memonry_pool_create(size_t size)
+memory_pool_t *memory_pool_create(size_t size)
 {
-	memonry_pool_t *p = NULL;
-	p = (memonry_pool_t*)malloc(size + sizeof(memonry_pool_t));
+	memory_pool_t *p = NULL;
+	p = (memory_pool_t*)malloc(size + sizeof(memory_pool_t));
 	assert(p != NULL);
 	p->max = size;
 	p->d.failed = 0;
-	p->d.last = (uint8_t *)p + sizeof(memonry_pool_t);
-	p->d.end = (uint8_t*)p + size + sizeof(memonry_pool_t);
+	p->d.last = (uint8_t *)p + sizeof(memory_pool_t);
+	p->d.end = (uint8_t*)p + size + sizeof(memory_pool_t);
 	p->d.next = NULL;
 	p->large = NULL;
 	p->current = p;
 	return p;
 }
-void memonry_pool_destroy(memonry_pool_t *pool)
+void memory_pool_destroy(memory_pool_t *pool)
 {
 	assert(pool != NULL);	
-	memonry_pool_t *p = pool;
-	memonry_pool_t *n = NULL;
-	memonry_pool_large_data_t *pl,*nl = NULL;
+	memory_pool_t *p = pool;
+	memory_pool_t *n = NULL;
+	memory_pool_large_data_t *pl,*nl = NULL;
 	for(pl = pool->large;pl;pl = nl,nl = nl->next)
 	{
 		nl = pl->next;
@@ -43,17 +43,17 @@ void memonry_pool_destroy(memonry_pool_t *pool)
 	
 	return;
 }
-void *memonry_pool_alloc_block(memonry_pool_t *pool,size_t size)
+void *memory_pool_alloc_block(memory_pool_t *pool,size_t size)
 {
 	assert(pool != NULL);
-	printf("\n========\nallocate a block memonry in memonry pool\n=======\n");
+	printf("\n========\nallocate a block memory in memory pool\n=======\n");
 	uint8_t *m = NULL;
-	memonry_pool_t *current = pool->current;
-	memonry_pool_t *p = NULL;
-	memonry_pool_t *newPool = (memonry_pool_t*)malloc(size + sizeof(memonry_pool_t));
+	memory_pool_t *current = pool->current;
+	memory_pool_t *p = NULL;
+	memory_pool_t *newPool = (memory_pool_t*)malloc(size + sizeof(memory_pool_t));
 	assert(newPool);
-	newPool->d.last = (uint8_t *)newPool + sizeof(memonry_pool_t); 
-	newPool->d.end = (uint8_t *)newPool + size + sizeof(memonry_pool_t);
+	newPool->d.last = (uint8_t *)newPool + sizeof(memory_pool_t); 
+	newPool->d.end = (uint8_t *)newPool + size + sizeof(memory_pool_t);
 	newPool->max = size;
 	newPool->large = NULL;
 	newPool->d.failed = 0;
@@ -68,14 +68,14 @@ void *memonry_pool_alloc_block(memonry_pool_t *pool,size_t size)
 	m = align_ptr(newPool->d.last,4);
 	return m;
 }
-void *memonry_pool_alloc_large(memonry_pool_t *pool,size_t size)
+void *memory_pool_alloc_large(memory_pool_t *pool,size_t size)
 {
 	assert(pool != NULL);
-	memonry_pool_large_data_t *pl = NULL; 
+	memory_pool_large_data_t *pl = NULL; 
 	int n = 0;
 	void *p = malloc(size);
 	assert(p != NULL);
-	printf("\n========\nallocate a large memonry in memonry pool\n=======\n");
+	printf("\n========\nallocate a large memory in memory pool\n=======\n");
 	for(pl = pool->large;pl;pl = pl->next)
 	{
 		if(pl->alloc == NULL)
@@ -86,17 +86,17 @@ void *memonry_pool_alloc_large(memonry_pool_t *pool,size_t size)
 		if(++n > 3)
 			break;
 	}
-	pl = (memonry_pool_large_data_t *)malloc(sizeof(memonry_pool_large_data_t));
+	pl = (memory_pool_large_data_t *)malloc(sizeof(memory_pool_large_data_t));
 	pl->alloc = p;
 	pl->next = pool->large;
 	pool->large = pl;
 	return p;
 }
-void *memonry_pool_alloc(memonry_pool_t *pool,size_t size)
+void *memory_pool_alloc(memory_pool_t *pool,size_t size)
 {
 	assert(pool != NULL);
 	uint8_t *m;
-	memonry_pool_t *p = NULL;
+	memory_pool_t *p = NULL;
 	if(size <= pool->max)
 	{
 		p = pool->current;
@@ -109,14 +109,14 @@ void *memonry_pool_alloc(memonry_pool_t *pool,size_t size)
 			}
 			p = p->d.next;
 		}while(p);
-		return memonry_pool_alloc_block(pool,size);
+		return memory_pool_alloc_block(pool,size);
 	}
-	return memonry_pool_alloc_large(pool,size);
+	return memory_pool_alloc_large(pool,size);
 }
 
-int memonry_pool_free(memonry_pool_t *pool,void *p)
+int memory_pool_free(memory_pool_t *pool,void *p)
 {
-	memonry_pool_large_data_t *pl = NULL;
+	memory_pool_large_data_t *pl = NULL;
 	assert(pool != NULL);
 	for(pl = pool->large;pl;pl = pl->next)
 	{
