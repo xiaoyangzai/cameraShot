@@ -3,7 +3,6 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <linux/videodev2.h>
-#include "memory_pool.h"
 typedef struct _VideoBuffer {
     void   *start;
     size_t  length;
@@ -19,7 +18,7 @@ typedef struct _VideoV4l2{
 	struct v4l2_buffer buf;
 }VideoV4l2;
 
-int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t *pool);
+int init_v4l2_device(VideoV4l2 *video,int frame_buff_count);
 
 int start_capture_frame(int fd);
 int allocate_memory(VideoV4l2 *video);

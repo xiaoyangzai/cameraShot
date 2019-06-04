@@ -15,7 +15,6 @@
 
 #include <asm/types.h>        
 #include <linux/videodev2.h>
-#include "memory_pool.h"
 #include "jpeg_util.h"
 #include "video_util.h"
 
@@ -25,10 +24,9 @@
 }while(0)
 
 
-int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t*pool)
+int init_v4l2_device(VideoV4l2 *video,int frame_buff_count)
 {
 	assert(video != NULL);
-	assert(pool != NULL);
 	int ret;
 	//获取摄像头信息
     struct v4l2_capability cap;
@@ -107,13 +105,13 @@ int init_v4l2_device(VideoV4l2 *video,int frame_buff_count,memonry_pool_t*pool)
 	printf("===== video set ok! ==========\n");
 	//从内存池中申请空间并映射
 	video->frame_buff_count = frame_buff_count;
-	video->framebuf = (VideoBuffer*)memonry_pool_alloc(pool,frame_buff_count* sizeof(VideoBuffer));
+	video->framebuf = (VideoBuffer*)malloc(frame_buff_count* sizeof(VideoBuffer));
 	if(video->framebuf == NULL)
 	{
-		printf("Allocate memony failed from memony pool\n");
+		printf("Allocate memony failed\n");
 		exit(-1);
 	}
-	printf("allocate memonry....\n");
+	printf("allocate memory....\n");
 	allocate_memory(video);
 	printf("start capture frame....\n");
 	start_capture_frame(video->videofd);
@@ -208,7 +206,6 @@ int release_memory(VideoV4l2*video)
 	for (i=0; i< video->frame_buff_count; i++) 
         munmap(video->framebuf[i].start, video->framebuf[i].length);
 
-	//free(video->framebuf);
-	//close(video->videofd);
+	free(video->framebuf);
 	return 0;
 }
