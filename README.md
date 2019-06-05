@@ -50,7 +50,11 @@
 
 该项目来自于物联网人工智能电子秤项目实战课程的Linux C阶段课程的阶段项目
 主要面向Linux C编程的小白玩家以及需要提升C编程能力的同学
-课程封面
+
+**课程封面**
+
+[![Linux C核心编程系列课程封面](https://github.com/xiaoyangzai/cameraShot/raw/master/project_images/C%E8%AF%AD%E8%A8%80%E7%BC%96%E7%A8%8B%E8%AF%BE%E7%A8%8B%E5%B0%81%E9%9D%A2.png)](https://edu.csdn.net/course/detail/24969 "一脸懵逼")
+
 
 课程视频传送门: <https://edu.csdn.net/course/detail/24969>
 
@@ -60,7 +64,31 @@
 智能电子秤以物联网技术为基础,通过人工智能技术智能自动识别蔬菜水果种类,从而实现蔬菜
 水果自动称重与结算,最大化的降低人工参与度,提高交易效率,降低交易成本。
 
+
+## 项目特点
+
+	**有意思....**
+	**这就是人工智能?啧啧啧**
+	**经济实惠**
+	**学生党专用**
+	**你买不了吃亏....**
+	**二营长，把我的.....**
+
 ## 项目展示
+
+硬件环境
+
+![智能电子秤](https://github.com/xiaoyangzai/cameraShot/raw/master/project_images/%E7%A1%AC%E4%BB%B6%E7%BB%84%E5%90%88.jpg)
+
+称个辣椒试试
+
+![智能电子秤](https://github.com/xiaoyangzai/cameraShot/raw/master/project_images/%E7%A7%B0%E9%87%8D-%E8%BE%A3%E6%A4%92.jpg)
+
+
+塑料袋? 不存在的.
+
+![智能电子秤](https://github.com/xiaoyangzai/cameraShot/raw/master/project_images/%E7%A7%B0%E9%87%8D-%E8%BE%A3%E6%A4%92-%E5%A1%91%E6%96%99%E8%A2%8B.jpg)
+
 
 ## 项目模块
 
