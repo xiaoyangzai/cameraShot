@@ -388,7 +388,7 @@ void yuyv_to_rgb(unsigned char* yuyv,unsigned char* rgb24,int w,int h)
 	Return:
 		Upon successfully completion, encode_jpeg shall return the 0. Otherwise, -1 shall be returned. 
 */
-int encode_jpeg(uint8_t*rgb24,int width,int height,uint8_t **outbuffer,uint64_t*outlen)
+int encode_jpeg(uint8_t*rgb24,int width,int height,uint8_t *jpeg_data,uint64_t*outlen)
 {
 	uint8_t *outdata = rgb24;
 	struct jpeg_compress_struct cinfo = { 0 };
@@ -396,13 +396,13 @@ int encode_jpeg(uint8_t*rgb24,int width,int height,uint8_t **outbuffer,uint64_t*
 	JSAMPROW row_ptr[1];
 	int row_stride;
 
-	*outbuffer = NULL;
+	uint8_t *outbuffer = NULL;
 	*outlen = 0;
 
 	cinfo.err = jpeg_std_error(&jerr);
 	jpeg_create_compress(&cinfo);
 
-	jpeg_mem_dest(&cinfo, outbuffer, outlen);
+	jpeg_mem_dest(&cinfo, &outbuffer, outlen);
 	cinfo.image_width = width;
 	cinfo.image_height = height;
 	cinfo.input_components = 3;
@@ -423,6 +423,13 @@ int encode_jpeg(uint8_t*rgb24,int width,int height,uint8_t **outbuffer,uint64_t*
 	}
 
 	jpeg_finish_compress(&cinfo);
+
+	memcpy(jpeg_data,outbuffer,*outlen);
 	jpeg_destroy_compress(&cinfo);
+	if(outbuffer != NULL)
+	{
+		free(outbuffer);
+		outbuffer = NULL;
+	}
 	return 0;
 }

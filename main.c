@@ -53,9 +53,9 @@ int main(int argc,char *argv[])
 	//uint8_t *resizedata = (uint8_t *)memory_pool_alloc(pool,224*224*3);
 	holder_next_frame(&video,rgb24);
 	printf("hold the next frame.\n");
-	uint8_t *outbuffer = NULL;
+	uint8_t *outbuffer= (uint8_t *)malloc(5*1024*1024);
 	uint64_t outlen = 0;
-	encode_jpeg(rgb24,video.width,video.height,&outbuffer,&outlen);
+	encode_jpeg(rgb24,video.width,video.height,outbuffer,&outlen);
 	int fd = open(argv[2],O_WRONLY|O_CREAT,0666);
 	if(fd < 0)
 		SYS_ERR("open failed");
